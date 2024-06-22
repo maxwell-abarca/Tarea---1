@@ -46,13 +46,14 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        Optional<Category> category = CategoryRepository.findById(product.getCategory().getId());
         return ProductRepository.findById(id)
                 .map(existingProduct -> {
                     existingProduct.setName(product.getName());
                     existingProduct.setDescription(product.getDescription());
                     existingProduct.setPrice(product.getPrice());
                     existingProduct.setStock(product.getStock());
-                    existingProduct.setCategory(product.getCategory());
+                    existingProduct.setCategory(category.get());
                     return ProductRepository.save(existingProduct);
                 })
                 .orElseGet(() -> {
