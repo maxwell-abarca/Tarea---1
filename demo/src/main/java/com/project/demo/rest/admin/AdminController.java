@@ -29,18 +29,18 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public User createAdministrator(@RequestBody User newAdminUser) {
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
+    @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
+    public User createSuperAdministrator(@RequestBody User newSuperAdminUser) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN_ROLE);
 
         if (optionalRole.isEmpty()) {
             return null;
         }
 
         var user = new User();
-        user.setName(newAdminUser.getName());
-        user.setEmail(newAdminUser.getEmail());
-        user.setPassword(passwordEncoder.encode(newAdminUser.getPassword()));
+        user.setName(newSuperAdminUser.getName());
+        user.setEmail(newSuperAdminUser.getEmail());
+        user.setPassword(passwordEncoder.encode(newSuperAdminUser.getPassword()));
         user.setRole(optionalRole.get());
 
         return userRepository.save(user);
